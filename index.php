@@ -1,21 +1,15 @@
 <?php
 
-use Imagine\Exception\RuntimeException;
-use Imagine\Imagick\Imagine;
-
-require_once './vendor/autoload.php';
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $tmpPath = $_FILES['image']['tmp_name'];
     if (is_uploaded_file($tmpPath)) {
         try {
-            $imagine = new Imagine();
-            $image = $imagine->open($tmpPath);
-            echo 'Image uploaded! Metadata:' . PHP_EOL;
-            var_dump($image->metadata());
+            $image = new Imagick($tmpPath);
+            echo 'Image uploaded! Properties:' . PHP_EOL;
+            var_dump($image->getImageProperties());
             echo PHP_EOL;
-        } catch (RuntimeException $ex) {
-            echo 'Runtime Exception:' . PHP_EOL;
+        } catch (ImagickException $ex) {
+            echo 'Thrown Exception:' . PHP_EOL;
             var_dump($ex);
             echo PHP_EOL;
         }
